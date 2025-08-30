@@ -13,20 +13,22 @@ func (p *process) Scan() error {
 	nameAp := p.Documents.Document.WayBillV3Transit.Content.Position.FullName
 	codeAp := p.Documents.Document.WayBillV3Transit.Content.Position.Alccode
 	p.Records = make([]*domain.Record, 0)
+	// Reinitialize to avoid stale state or nil map panics.
+	p.Koroba = make(map[string][]*domain.Record)
 	for _, position := range p.Documents.Document.WayBillV3Transit.Content.Position.MarkInfo.Boxpos {
 		boxNumber := strings.TrimSpace(position.Boxnumber)
 		if _, ok := p.Koroba[boxNumber]; !ok {
 			p.Koroba[boxNumber] = make([]*domain.Record, 0)
 		}
 		for _, amBox := range position.Amclist.Amc {
-			rec := domain.Record{
+			rec := &domain.Record{
 				CodeAp: codeAp,
 				NameAp: nameAp,
 				Text:   strings.TrimSpace(amBox.Text),
 				Korob:  boxNumber,
 			}
-			p.Records = append(p.Records, &rec)
-			p.Koroba[boxNumber] = append(p.Koroba[boxNumber], &rec)
+			p.Records = append(p.Records, rec)
+			p.Koroba[boxNumber] = append(p.Koroba[boxNumber], rec)
 		}
 	}
 	for _, palet := range p.Documents.Document.WayBillV3Transit.Content.Position.BoxInfo.Boxtree.Bl {

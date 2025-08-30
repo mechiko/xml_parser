@@ -1,7 +1,7 @@
 package address
 
 import (
-	"strconv"
+	"github.com/xuri/excelize/v2"
 )
 
 type Address struct {
@@ -17,9 +17,9 @@ func New(row int, col int) *Address {
 }
 
 func (a *Address) Address() string {
-	colChar := string(a.col + 65)
-	out := colChar + strconv.Itoa(a.row)
-	return out
+	// excelize expects 1-based col/row
+	name, _ := excelize.CoordinatesToCellName(a.col+1, a.row)
+	return name
 }
 
 func (a *Address) NextCol() string {
@@ -53,15 +53,13 @@ func (a *Address) AddRow(row int) string {
 }
 
 func (a *Address) ShiftCol(col int) string {
-	colChar := string(a.col + col + 65)
-	out := colChar + strconv.Itoa(a.row)
-	return out
+	name, _ := excelize.CoordinatesToCellName(a.col+1+col, a.row)
+	return name
 }
 
 func (a *Address) Range(row int, col int) string {
-	colChar := string(a.col + col + 65)
-	out := colChar + strconv.Itoa(a.row+row)
-	return out
+	name, _ := excelize.CoordinatesToCellName(a.col+1+col, a.row+row)
+	return name
 }
 
 func (a *Address) Row() int {
@@ -69,5 +67,5 @@ func (a *Address) Row() int {
 }
 
 func (a *Address) Col() int {
-	return a.row
+	return a.col
 }

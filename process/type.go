@@ -34,10 +34,6 @@ func New(file string) (*process, error) {
 	p := &process{
 		File:               file,
 		NameFileWithoutExt: name,
-		Koroba:             make(map[string][]*domain.Record),
-		Palet:              map[string]map[string]string{},
-		KM:                 make(map[string]string),
-		arrKM:              make([]string, 0),
 	}
 	return p, nil
 }

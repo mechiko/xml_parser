@@ -10,6 +10,12 @@ import (
 )
 
 func (p *process) Save(out string) error {
+	if out == "" {
+		out = "."
+	}
+	if err := os.MkdirAll(out, 0o755); err != nil {
+		return fmt.Errorf("create output dir %q: %w", out, err)
+	}
 	fileNameKM := "Utility_" + p.NameFileWithoutExt + ".csv"
 	fileNameKM = filepath.Join(out, fileNameKM)
 
