@@ -14,12 +14,6 @@ type process struct {
 	File               string
 	Records            []*domain.Record
 	Koroba             map[string][]*domain.Record
-	Palet              map[string]map[string]string
-	KM                 map[string]string
-	arrKM              []string
-	ListKoroba         [][]string
-	ListPalet          [][]string
-	KorobaKeys         []string
 	Documents          *Documents
 }
 
